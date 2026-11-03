@@ -1,0 +1,458 @@
+
+/* =========================================
+   FADEX - PAGINA PRINCIPAL
+========================================= */
+
+/* BARRA DE NAVEGACION */
+
+.navbar {
+    width: 100%;
+    height: 72px;
+
+    background: #080808;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+
+    border-bottom: 1px solid #252525;
+}
+
+/* LOGOTIPO */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 21px;
+    font-weight: bold;
+    color: white;
+}
+
+.logo img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.logo span {
+    color: var(--color-dorado);
+}
+
+/* MENU */
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.nav-menu a {
+    color: #dddddd;
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.nav-menu a:hover {
+    color: var(--color-dorado);
+}
+
+/* ICONOS DE NAVEGACION */
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.nav-icon {
+    background: transparent;
+    border: none;
+
+    color: #cccccc;
+    font-size: 19px;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.nav-icon:hover {
+    color: var(--color-dorado);
+}
+
+.user-icon {
+    width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: var(--color-dorado);
+    color: #111111;
+
+    font-size: 17px;
+}
+
+/* =========================================
+   HERO - CARRUSEL PRINCIPAL
+========================================= */
+
+.hero {
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    transition: background-image 0.4s;
+}
+
+/* OSCURECER IMAGEN */
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.78),
+        rgba(0, 0, 0, 0.43),
+        rgba(0, 0, 0, 0.55)
+    );
+
+    z-index: 1;
+}
+
+/* CONTENIDO DEL HERO */
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+
+    width: 550px;
+    margin-left: 28%;
+
+    padding-top: 50px;
+}
+
+.hero-content h1 {
+    font-size: clamp(38px, 4.5vw, 60px);
+
+    line-height: 1.15;
+
+    font-weight: 800;
+
+    color: white;
+
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    color: #eeeeee;
+
+    font-size: 15px;
+    line-height: 1.6;
+
+    max-width: 450px;
+
+    margin-bottom: 25px;
+}
+
+/* BOTON RESERVAR */
+
+.btn-reservar {
+    background: var(--color-dorado);
+
+    color: #111111;
+
+    border: none;
+    border-radius: 5px;
+
+    padding: 13px 28px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.btn-reservar:hover {
+    background: #f0cc45;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   FLECHAS DEL CARRUSEL
+========================================= */
+
+.hero-arrow {
+    position: absolute;
+
+    z-index: 3;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.4);
+
+    border: 1px solid rgba(255,255,255,0.25);
+
+    color: white;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.hero-arrow:hover {
+    background: var(--color-dorado);
+    color: black;
+}
+
+.hero-arrow.left {
+    left: 22px;
+}
+
+.hero-arrow.right {
+    right: 22px;
+}
+
+/* INDICADORES */
+
+.hero-indicators {
+    position: absolute;
+
+    z-index: 3;
+
+    bottom: 30px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    display: flex;
+    gap: 8px;
+}
+
+.hero-indicators button {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 10px;
+    border: none;
+
+    background: #777777;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.hero-indicators button.active {
+    width: 25px;
+    background: var(--color-dorado);
+}
+
+/* =========================================
+   BOTONES FLOTANTES
+========================================= */
+
+.floating-buttons {
+    position: fixed;
+
+    right: 22px;
+    bottom: 22px;
+
+    z-index: 200;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.float-btn {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+    border: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    box-shadow: 0 3px 10px #0005;
+
+    transition: 0.3s;
+}
+
+.float-btn:hover {
+    transform: scale(1.1);
+}
+
+.float-cart {
+    background: var(--color-dorado);
+    color: #111111;
+}
+
+.float-whatsapp {
+    background: #00c66a;
+    color: white;
+}
+
+/* =========================================
+   SECCIONES GENERALES
+========================================= */
+
+.landing-section {
+    padding: 85px 8%;
+    background: #101010;
+}
+
+.section-title {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.section-description {
+    color: var(--color-gris);
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 40px;
+}
+
+/* SERVICIOS */
+
+.services-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 22px;
+}
+
+.service-card {
+    background: #191919;
+
+    border: 1px solid #303030;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+
+    transition: 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-dorado);
+}
+
+.service-card img {
+    width: 100%;
+    height: 180px;
+
+    object-fit: cover;
+}
+
+.service-info {
+    padding: 20px;
+}
+
+.service-info h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.service-info p {
+    color: var(--color-dorado);
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+        padding: 0 4%;
+    }
+
+    .nav-menu {
+        gap: 15px;
+    }
+
+    .hero-content {
+        margin-left: 15%;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .navbar {
+        height: 65px;
+    }
+
+    .nav-menu {
+        display: none;
+    }
+
+    .hero {
+        min-height: 550px;
+        background-position: center;
+    }
+
+    .hero-content {
+        width: 85%;
+        margin: auto;
+    }
+
+    .hero-content h1 {
+        font-size: 38px;
+    }
+
+    .hero-arrow {
+        width: 35px;
+        height: 35px;
+    }
+
+    .landing-section {
+        padding: 60px 5%;
+    }
+
+}

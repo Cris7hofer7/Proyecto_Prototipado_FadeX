@@ -1,0 +1,532 @@
+
+/* =========================================
+   FADEX - DASHBOARDS
+========================================= */
+
+/* CONTENEDOR GENERAL */
+
+.dashboard {
+    min-height: 100vh;
+    display: flex;
+    background: #0d0d0d;
+}
+
+/* =========================================
+   BARRA LATERAL
+========================================= */
+
+.sidebar {
+    width: 255px;
+    min-height: 100vh;
+
+    background: #090909;
+
+    border-right: 1px solid #292929;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 25px 15px;
+
+    flex-shrink: 0;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 0 12px 30px;
+
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.sidebar-logo img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.sidebar-logo span {
+    color: var(--color-dorado);
+}
+
+/* TITULOS DEL MENU */
+
+.sidebar-label {
+    color: #777777;
+
+    font-size: 10px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+
+    padding: 15px 12px 10px;
+}
+
+/* OPCIONES */
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    width: 100%;
+
+    padding: 13px 12px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #aaaaaa;
+
+    font-size: 13px;
+    text-align: left;
+
+    transition: 0.3s;
+}
+
+.sidebar-link:hover {
+    background: #211d10;
+    color: var(--color-dorado);
+}
+
+.sidebar-link.active {
+    background: #29220f;
+    color: var(--color-dorado);
+    font-weight: bold;
+}
+
+.sidebar-icon {
+    width: 22px;
+    text-align: center;
+    font-size: 17px;
+}
+
+/* CERRAR SESION */
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #292929;
+}
+
+/* =========================================
+   CONTENIDO PRINCIPAL
+========================================= */
+
+.dashboard-main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* =========================================
+   BARRA SUPERIOR
+========================================= */
+
+.dashboard-topbar {
+    height: 72px;
+
+    background: #111111;
+
+    border-bottom: 1px solid #292929;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+}
+
+.topbar-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.topbar-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.topbar-user-info strong {
+    font-size: 12px;
+}
+
+.topbar-user-info span {
+    color: #999999;
+    font-size: 11px;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: var(--color-dorado);
+
+    color: #111111;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+/* =========================================
+   CONTENIDO DEL DASHBOARD
+========================================= */
+
+.dashboard-content {
+    width: 100%;
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding: 32px;
+}
+
+.dashboard-title {
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.dashboard-subtitle {
+    color: #999999;
+    font-size: 13px;
+    margin-bottom: 28px;
+}
+
+/* =========================================
+   TARJETAS ESTADISTICAS
+========================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 17px;
+
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: #171717;
+
+    border: 1px solid #2c2c2c;
+
+    border-radius: 9px;
+
+    padding: 22px;
+
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    border-color: var(--color-dorado);
+    transform: translateY(-3px);
+}
+
+.stat-card-label {
+    color: #999999;
+    font-size: 12px;
+}
+
+.stat-card-value {
+    display: block;
+
+    font-size: 27px;
+    font-weight: bold;
+
+    margin: 14px 0 8px;
+}
+
+.stat-card-description {
+    color: #64c88b;
+    font-size: 11px;
+}
+
+/* =========================================
+   PANELES
+========================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns: 1.4fr 1fr;
+
+    gap: 20px;
+}
+
+.dashboard-panel {
+    background: #171717;
+
+    border: 1px solid #2c2c2c;
+
+    border-radius: 9px;
+
+    padding: 22px;
+
+    margin-bottom: 20px;
+}
+
+.panel-title {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   TABLAS
+========================================= */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.dashboard-table th {
+    color: #999999;
+    font-weight: normal;
+    text-align: left;
+}
+
+.dashboard-table th,
+.dashboard-table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid #303030;
+    white-space: nowrap;
+}
+
+.dashboard-table tr:hover td {
+    background: #202020;
+}
+
+/* =========================================
+   ESTADOS
+========================================= */
+
+.status {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+}
+
+.status-confirmed {
+    background: #193b29;
+    color: #82dca3;
+}
+
+.status-pending {
+    background: #403719;
+    color: #e8cc6b;
+}
+
+.status-cancelled {
+    background: #402323;
+    color: #ef9292;
+}
+
+/* =========================================
+   BOTONES DEL DASHBOARD
+========================================= */
+
+.dashboard-button {
+    border: none;
+    border-radius: 5px;
+
+    padding: 10px 15px;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.dashboard-button.primary {
+    background: var(--color-dorado);
+    color: #111111;
+    font-weight: bold;
+}
+
+.dashboard-button.secondary {
+    background: #292929;
+    color: white;
+    border: 1px solid #444444;
+}
+
+.dashboard-button:hover {
+    opacity: 0.85;
+}
+
+/* =========================================
+   FORMULARIOS
+========================================= */
+
+.dashboard-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.dashboard-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dashboard-form-group label {
+    font-size: 12px;
+    color: #bbbbbb;
+}
+
+.dashboard-form-group input,
+.dashboard-form-group select,
+.dashboard-form-group textarea {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #0e0e0e;
+
+    border: 1px solid #383838;
+    border-radius: 5px;
+
+    color: white;
+    outline: none;
+}
+
+.dashboard-form-group input:focus,
+.dashboard-form-group select:focus,
+.dashboard-form-group textarea:focus {
+    border-color: var(--color-dorado);
+}
+
+.dashboard-form-group.full {
+    grid-column: 1 / -1;
+}
+
+/* =========================================
+   BUSCADOR Y HERRAMIENTAS
+========================================= */
+
+.dashboard-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.dashboard-search {
+    padding: 11px 14px;
+
+    background: #171717;
+
+    border: 1px solid #383838;
+    border-radius: 5px;
+
+    color: white;
+
+    outline: none;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 75px;
+        padding: 20px 8px;
+    }
+
+    .sidebar-logo {
+        justify-content: center;
+        padding: 0 0 25px;
+    }
+
+    .sidebar-logo img {
+        width: 35px;
+    }
+
+    .sidebar-logo span,
+    .sidebar-label,
+    .sidebar-link span:last-child {
+        display: none;
+    }
+
+    .sidebar-link {
+        justify-content: center;
+        padding: 13px 5px;
+    }
+
+    .sidebar-icon {
+        font-size: 19px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .dashboard-content {
+        padding: 20px 14px;
+    }
+
+    .dashboard-topbar {
+        padding: 0 15px;
+    }
+
+    .dashboard-title {
+        font-size: 22px;
+    }
+
+    .dashboard-form {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-form-group.full {
+        grid-column: auto;
+    }
+
+    .dashboard-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+}
