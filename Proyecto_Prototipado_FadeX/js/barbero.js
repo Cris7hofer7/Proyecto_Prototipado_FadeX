@@ -281,8 +281,8 @@ function crearTablaReservasBarbero(reservas, mostrarAcciones) {
 
                             <td>
                                 ${reserva.fechaReserva
-                                    ? formatearFechaBarbero(reserva.fechaReserva)
-                                    : "No registrada"}
+            ? formatearFechaBarbero(reserva.fechaReserva)
+            : "No registrada"}
                             </td>
 
                             <td>
@@ -358,13 +358,8 @@ function crearAccionesReservaBarbero(reserva) {
 // 8. ACTUALIZAR ESTADO DE UNA RESERVA
 // ==========================================
 
+
 function actualizarEstadoReservaBarbero(id, nuevoEstado) {
-
-    const confirmar = confirm(
-        `¿Deseas cambiar el estado de esta reserva a "${nuevoEstado}"?`
-    );
-
-    if (!confirmar) return;
 
     const reservas = obtenerDatos("fadexReservas");
 
@@ -388,6 +383,29 @@ function actualizarEstadoReservaBarbero(id, nuevoEstado) {
         return;
     }
 
+    // Comprobar que el nuevo estado sea válido.
+    const estadosPermitidos = ["Completada", "Cancelada"];
+
+    if (!estadosPermitidos.includes(nuevoEstado)) {
+        alert("El estado seleccionado no es válido.");
+        return;
+    }
+
+    // No permitir modificar reservas que ya finalizaron.
+    if (
+        reserva.estado === "Completada" ||
+        reserva.estado === "Cancelada"
+    ) {
+        alert("Esta reserva ya fue finalizada y no puede modificarse.");
+        return;
+    }
+
+    const confirmar = confirm(
+        `¿Deseas cambiar el estado de esta reserva a "${nuevoEstado}"?`
+    );
+
+    if (!confirmar) return;
+
     reserva.estado = nuevoEstado;
 
     guardarDatos("fadexReservas", reservas);
@@ -396,6 +414,7 @@ function actualizarEstadoReservaBarbero(id, nuevoEstado) {
 
     navegarDashboard("reservas");
 }
+
 
 
 // ==========================================
@@ -411,7 +430,7 @@ function mostrarVentasBarbero(barbero) {
     // También conservamos los registros antiguos que no tienen barberoId.
     const misVentas = ventas.filter(
         venta =>
-            !venta.barberoId ||
+            !venta.barberoId &&
             Number(venta.barberoId) === Number(barbero.id)
     );
 
@@ -709,7 +728,7 @@ function crearTablaVentasBarbero(ventas) {
                         <tr>
                             <td>${venta.descripcion || venta.producto || venta.servicio || "Venta"}</td>
                             <td>${venta.cliente || "No registrado"}</td>
-                            <td>${venta.fecha}</td>
+                            <td>${formatearFechaBarbero(venta.fecha)}</td>
                             <td>${venta.metodoPago}</td>
                             <td>S/ ${Number(venta.total || 0).toFixed(2)}</td>
                         </tr>

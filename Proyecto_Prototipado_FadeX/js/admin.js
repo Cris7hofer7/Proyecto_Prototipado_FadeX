@@ -139,7 +139,8 @@ function crearTablaReservasAdmin(reservas) {
                         <th>Cliente</th>
                         <th>Barbero</th>
                         <th>Servicio</th>
-                        <th>Fecha</th>
+                        <th>Fecha de reserva</th>
+                        <th>Fecha de atención</th>
                         <th>Hora</th>
                         <th>Estado</th>
                     </tr>
@@ -151,8 +152,15 @@ function crearTablaReservasAdmin(reservas) {
                             <td>${reserva.cliente}</td>
                             <td>${reserva.barbero}</td>
                             <td>${reserva.servicio}</td>
-                            <td>${reserva.fecha}</td>
-                            <td>${reserva.hora}</td>
+                        <td>
+                            ${reserva.fechaReserva
+                                ? formatearFechaCliente(reserva.fechaReserva)
+                                : "No registrada"}
+                        </td>
+
+                        <td>${formatearFechaCliente(reserva.fecha)}</td>
+
+                        <td>${reserva.hora}</td>
                             <td>
                                 <span class="status ${obtenerClaseEstado(reserva.estado)}">
                                     ${reserva.estado}
@@ -203,29 +211,99 @@ function mostrarReservasAdmin() {
 function agregarReservaDemo() {
 
     const clientes = obtenerDatos("fadexClientes");
-    const barberos = obtenerDatos("fadexBarberos");
-    const servicios = obtenerDatos("fadexServicios");
 
-    if (!clientes.length || !barberos.length || !servicios.length) {
-        alert("No hay suficientes datos para crear una reserva.");
+    const barberos = obtenerDatos("fadexBarberos").filter(
+        barbero => !barbero.estado || barbero.estado === "Activo"
+    );
+
+    const servicios = obtenerDatos("fadexServicios").filter(
+        servicio => !servicio.estado || servicio.estado === "Activo"
+    );
+
+    // Comprobar que existan los datos necesarios.
+    if (
+        clientes.length === 0 ||
+        barberos.length === 0 ||
+        servicios.length === 0
+    ) {
+        alert(
+            "No hay suficientes clientes, barberos o servicios activos para crear una reserva."
+        );
         return;
     }
 
-    const nuevaReserva = {
-        id: Date.now(),
-        clienteId: clientes[0].id,
-        cliente: clientes[0].nombre,
-        barberoId: barberos[0].id,
-        barbero: barberos[0].nombre,
-        servicioId: servicios[0].id,
-        servicio: servicios[0].nombre,
-        fecha: new Date().toISOString().split("T")[0],
-        hora: "16:00",
-        precio: servicios[0].precio,
-        estado: "Pendiente"
-    };
+    // Seleccionar los primeros registros disponibles.
+    const cliente = clientes[0];
+    const barbero = barberos[0];
+    const servicio = servicios[0];
+
+    // Utilizar la fecha local para evitar errores de zona horaria.
+    const fecha = obtenerFechaLocal();
+
+    // Mantener la hora de demostración.
+    const hora = "16:00";
+
+    const duracionNueva = Number(servicio.duracion || 30);
 
     const reservas = obtenerDatos("fadexReservas");
+
+    // Comprobar si el barbero ya tiene una cita en ese horario.
+    const horarioOcupado = reservas.some(reserva => {
+
+        if (
+            Number(reserva.barberoId) !== Number(barbero.id) ||
+            reserva.fecha !== fecha
+        ) {
+            return false;
+        }
+
+        if (
+            reserva.estado !== "Pendiente" &&
+            reserva.estado !== "Confirmada"
+        ) {
+            return false;
+        }
+
+        return existeCruceHorario(
+            hora,
+            duracionNueva,
+            reserva.hora,
+            Number(reserva.duracion || 30)
+        );
+    });
+
+    if (horarioOcupado) {
+        alert(
+            "El barbero seleccionado ya tiene una reserva que se cruza con las 16:00. No se pudo crear la reserva."
+        );
+        return;
+    }
+
+    // Crear la reserva con la misma estructura
+    // utilizada en el panel del cliente.
+    const nuevaReserva = {
+
+        id: Date.now(),
+
+        fechaReserva: obtenerFechaLocal(),
+
+        clienteId: cliente.id,
+        cliente: cliente.nombre,
+
+        barberoId: barbero.id,
+        barbero: barbero.nombre,
+
+        servicioId: servicio.id,
+        servicio: servicio.nombre,
+
+        fecha: fecha,
+        hora: hora,
+
+        precio: Number(servicio.precio),
+        duracion: duracionNueva,
+
+        estado: "Pendiente"
+    };
 
     reservas.push(nuevaReserva);
 
@@ -235,7 +313,6 @@ function agregarReservaDemo() {
 
     navegarDashboard("reservas");
 }
-
 
 // ==========================================
 // 5. GESTIÓN DE VENTAS
@@ -1064,7 +1141,8 @@ function agregarProductoAdmin() {
         id: Date.now(),
         nombre: nombre.trim(),
         precio: precio,
-        stock: stock
+        stock: stock,
+        estado: "Disponible"
     };
 
     productos.push(nuevoProducto);

@@ -1,0 +1,250 @@
+
+/* =========================================
+   FADEX - REGISTRO DE CLIENTES
+========================================= */
+
+.registro-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 35px 15px;
+    background:
+        linear-gradient(rgba(0,0,0,.85), rgba(0,0,0,.92)),
+        url("../assets/salon.jpg") center/cover no-repeat;
+}
+
+.registro-card {
+    width: 100%;
+    max-width: 650px;
+    padding: 35px 40px;
+    background: #111111;
+    border: 1px solid #383838;
+    border-radius: 9px;
+    animation: aparecerRegistro .4s ease;
+}
+
+@keyframes aparecerRegistro {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* MARCA */
+
+.registro-brand {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.registro-brand h1 {
+    color: var(--color-dorado);
+    font-family: Georgia, serif;
+    font-size: 35px;
+    font-style: italic;
+    margin: 0;
+}
+
+.registro-brand p {
+    color: #888888;
+    font-size: 10px;
+}
+
+.registro-card h2 {
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.registro-card h2 span {
+    color: var(--color-dorado);
+}
+
+/* FORMULARIO */
+
+.registro-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px 20px;
+}
+
+.registro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.registro-group label {
+    color: #cccccc;
+    font-size: 11px;
+}
+
+.registro-group input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px;
+    background: #171717;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    color: white;
+    outline: none;
+    font-size: 12px;
+}
+
+.registro-group input:focus {
+    border-color: var(--color-dorado);
+    box-shadow: 0 0 5px rgba(217,181,46,.2);
+}
+
+/* TERMINOS */
+
+.registro-terms {
+    grid-column: 1 / -1;
+    color: #aaaaaa;
+    font-size: 10px;
+}
+
+.registro-terms label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.registro-terms a {
+    color: var(--color-dorado);
+    text-decoration: none;
+}
+
+/* BOTON */
+
+.registro-button {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 12px;
+    background: rgba(217,181,46,.12);
+    border: 1px solid var(--color-dorado);
+    border-radius: 5px;
+    color: var(--color-dorado);
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.registro-button:hover {
+    background: var(--color-dorado);
+    color: #111111;
+}
+
+/* GOOGLE */
+
+.registro-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0;
+    color: #888888;
+    font-size: 10px;
+}
+
+.registro-divider::before,
+.registro-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #333333;
+}
+
+.registro-google {
+    display: block;
+    width: 50%;
+    margin: 0 auto;
+    padding: 10px;
+    background: #222222;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.registro-google span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    margin-right: 7px;
+    background: white;
+    border-radius: 3px;
+    color: #4285f4;
+    font-weight: bold;
+}
+
+/* MENSAJES */
+
+.registro-message {
+    display: none;
+    grid-column: 1 / -1;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 11px;
+}
+
+.registro-message.error {
+    display: block;
+    background: #472222;
+    color: #ffaaaa;
+}
+
+.registro-message.success {
+    display: block;
+    background: #193c29;
+    color: #9be5b4;
+}
+
+/* INICIAR SESION */
+
+.registro-login {
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 11px;
+    margin-top: 22px;
+}
+
+.registro-login a {
+    color: var(--color-dorado);
+    text-decoration: none;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 550px) {
+
+    .registro-card {
+        padding: 28px 20px;
+    }
+
+    .registro-form {
+        grid-template-columns: 1fr;
+    }
+
+    .registro-terms,
+    .registro-button,
+    .registro-message {
+        grid-column: 1;
+    }
+
+    .registro-google {
+        width: 100%;
+    }
+
+}

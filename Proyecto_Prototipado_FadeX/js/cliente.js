@@ -128,11 +128,23 @@ function mostrarResumenCliente(cliente) {
         reserva => reserva.estado === "Completada"
     ).length;
 
-    const proximaReserva = reservas.find(
-        reserva =>
-            reserva.estado === "Pendiente" ||
-            reserva.estado === "Confirmada"
+    // Obtener todas las reservas pendientes o confirmadas
+    const proximasReservas = reservas.filter(reserva =>
+        reserva.estado === "Pendiente" ||
+        reserva.estado === "Confirmada"
     );
+
+    // Ordenarlas por fecha y hora
+    proximasReservas.sort((a, b) => {
+
+        const fechaA = new Date(`${a.fecha}T${a.hora}:00`);
+        const fechaB = new Date(`${b.fecha}T${b.hora}:00`);
+
+        return fechaA - fechaB;
+    });
+
+    // Mostrar la más cercana, aunque ya haya pasado la hora
+    const proximaReserva = proximasReservas[0];
 
     return `
         <h2 class="dashboard-title">
