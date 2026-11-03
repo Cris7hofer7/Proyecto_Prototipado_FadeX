@@ -239,6 +239,7 @@ function mostrarReservasBarbero(barbero) {
 // 6. TABLA DE RESERVAS DEL BARBERO
 // ==========================================
 
+
 function crearTablaReservasBarbero(reservas, mostrarAcciones) {
 
     if (reservas.length === 0) {
@@ -256,8 +257,10 @@ function crearTablaReservasBarbero(reservas, mostrarAcciones) {
                     <tr>
                         <th>Cliente</th>
                         <th>Servicio</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
+                        <th>Duración</th>
+                        <th>Fecha de reserva</th>
+                        <th>Fecha de atención</th>
+                        <th>Hora de atención</th>
                         <th>Precio</th>
                         <th>Estado</th>
                         ${mostrarAcciones ? "<th>Acciones</th>" : ""}
@@ -274,11 +277,23 @@ function crearTablaReservasBarbero(reservas, mostrarAcciones) {
 
                             <td>${reserva.servicio}</td>
 
-                            <td>${reserva.fecha}</td>
+                            <td>${Number(reserva.duracion || 30)} minutos</td>
+
+                            <td>
+                                ${reserva.fechaReserva
+                                    ? formatearFechaBarbero(reserva.fechaReserva)
+                                    : "No registrada"}
+                            </td>
+
+                            <td>
+                                ${formatearFechaBarbero(reserva.fecha)}
+                            </td>
 
                             <td>${reserva.hora}</td>
 
-                            <td>S/ ${Number(reserva.precio).toFixed(2)}</td>
+                            <td>
+                                S/ ${Number(reserva.precio).toFixed(2)}
+                            </td>
 
                             <td>
                                 <span class="status ${obtenerClaseEstadoBarbero(reserva.estado)}">
@@ -287,11 +302,9 @@ function crearTablaReservasBarbero(reservas, mostrarAcciones) {
                             </td>
 
                             ${mostrarAcciones ? `
-
                                 <td>
                                     ${crearAccionesReservaBarbero(reserva)}
                                 </td>
-
                             ` : ""}
 
                         </tr>
@@ -305,6 +318,7 @@ function crearTablaReservasBarbero(reservas, mostrarAcciones) {
         </div>
     `;
 }
+
 
 
 // ==========================================
@@ -814,4 +828,16 @@ function obtenerClaseEstadoBarbero(estado) {
         default:
             return "";
     }
+}
+// ==========================================
+// FORMATEAR FECHAS DEL BARBERO
+// ==========================================
+
+function formatearFechaBarbero(fecha) {
+
+    if (!fecha) return "No disponible";
+
+    const [anio, mes, dia] = fecha.split("-");
+
+    return `${dia}/${mes}/${anio}`;
 }

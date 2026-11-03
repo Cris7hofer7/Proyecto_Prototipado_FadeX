@@ -179,8 +179,21 @@ function mostrarResumenCliente(cliente) {
             ? `
                     <p><strong>Servicio:</strong> ${proximaReserva.servicio}</p>
                     <p><strong>Barbero:</strong> ${proximaReserva.barbero}</p>
-                    <p><strong>Fecha:</strong> ${proximaReserva.fecha}</p>
-                    <p><strong>Hora:</strong> ${proximaReserva.hora}</p>
+                    <p><strong>Fecha de reserva:</strong>
+                        ${proximaReserva.fechaReserva
+                ? formatearFechaCliente(proximaReserva.fechaReserva)
+                : "No registrada"}
+                    </p>
+                    
+                    <p><strong>Fecha de atención:</strong>
+                        ${formatearFechaCliente(proximaReserva.fecha)}
+                    </p>
+
+                    <p><strong>Hora de atención:</strong> ${proximaReserva.hora}</p>
+
+                    <p><strong>Duración:</strong>
+                        ${Number(proximaReserva.duracion || 30)} minutos
+                    </p>
                     <p><strong>Estado:</strong> ${proximaReserva.estado}</p>
                 `
             : `
@@ -252,11 +265,12 @@ function mostrarAgendarCliente(cliente) {
                         <option value="">Selecciona un servicio</option>
 
                         ${servicios.map(servicio => `
-                            <option value="${servicio.id}">
-                                ${servicio.nombre} -
-                                S/ ${Number(servicio.precio).toFixed(2)}
-                            </option>
-                        `).join("")}
+                        <option value="${servicio.id}">
+                            ${servicio.nombre} -
+                            S/ ${Number(servicio.precio).toFixed(2)} -
+                            ${Number(servicio.duracion || 30)} minutos
+                        </option>
+                    `).join("")}
 
                     </select>
 
@@ -288,14 +302,15 @@ function mostrarAgendarCliente(cliente) {
 
                 <div class="dashboard-form-group">
 
-                    <label for="fecha-reserva">Fecha</label>
+                    <label for="fecha-reserva">Selecciona la fecha de tu cita</label>
 
                     <input
                         type="date"
                         id="fecha-reserva"
                         name="fecha"
                         min="${fechaActual}"
-                        required>
+                        required
+                        onclick="this.showPicker()">
 
                 </div>
 
@@ -310,15 +325,16 @@ function mostrarAgendarCliente(cliente) {
                         required>
 
                         <option value="">Selecciona una hora</option>
-                        <option value="09:00">09:00 a. m.</option>
-                        <option value="10:00">10:00 a. m.</option>
-                        <option value="11:00">11:00 a. m.</option>
-                        <option value="12:00">12:00 p. m.</option>
-                        <option value="14:00">02:00 p. m.</option>
-                        <option value="15:00">03:00 p. m.</option>
-                        <option value="16:00">04:00 p. m.</option>
-                        <option value="17:00">05:00 p. m.</option>
-                        <option value="18:00">06:00 p. m.</option>
+
+                        ${Array.from({ length: 55 }, (_, i) => {
+        const minutosTotales = 9 * 60 + i * 10;
+        const horas = Math.floor(minutosTotales / 60);
+        const minutos = minutosTotales % 60;
+
+        const hora = `${String(horas).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`;
+
+        return `<option value="${hora}">${hora}</option>`;
+    }).join("")}
 
                     </select>
 
@@ -393,27 +409,53 @@ function registrarReservaCliente(event) {
 
     const reservas = obtenerDatos("fadexReservas");
 
-    // Evitar que un mismo barbero tenga dos citas
-    // a la misma hora y fecha.
-    const horarioOcupado = reservas.some(
-        reserva =>
-            Number(reserva.barberoId) === barberoId &&
-            reserva.fecha === fecha &&
-            reserva.hora === hora &&
-            (
-                reserva.estado === "Pendiente" ||
-                reserva.estado === "Confirmada"
-            )
-    );
+    // ==========================================
+    // VERIFICAR DISPONIBILIDAD DEL BARBERO
+    // ==========================================
+
+    const duracionNueva = Number(servicio.duracion || 30);
+
+    const horarioOcupado = reservas.some(reserva => {
+
+        // Solo revisar reservas del mismo barbero y fecha.
+        if (
+            Number(reserva.barberoId) !== barberoId ||
+            reserva.fecha !== fecha
+        ) {
+            return false;
+        }
+
+        // Las reservas canceladas o completadas no bloquean horarios.
+        if (
+            reserva.estado !== "Pendiente" &&
+            reserva.estado !== "Confirmada"
+        ) {
+            return false;
+        }
+
+        // Compatibilidad con reservas antiguas que no tengan duración.
+        const duracionExistente = Number(reserva.duracion || 30);
+
+        return existeCruceHorario(
+            hora,
+            duracionNueva,
+            reserva.hora,
+            duracionExistente
+        );
+    });
 
     if (horarioOcupado) {
-        alert("Ese horario ya está ocupado. Selecciona otro.");
+        alert(
+            "Ese horario se cruza con otra reserva del barbero. Selecciona otro horario."
+        );
         return;
     }
 
     const nuevaReserva = {
-
         id: Date.now(),
+
+        // Fecha en que el cliente registró la reserva.
+        fechaReserva: obtenerFechaLocal(),
 
         clienteId: cliente.id,
         cliente: cliente.nombre,
@@ -498,9 +540,11 @@ function crearTablaReservasCliente(reservas) {
                 <thead>
                     <tr>
                         <th>Servicio</th>
+                        <th>Duración</th>
                         <th>Barbero</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
+                        <th>Fecha de reserva</th>
+                        <th>Fecha de atención</th>
+                        <th>Hora de atención</th>
                         <th>Precio</th>
                         <th>Estado</th>
                         <th>Acción</th>
@@ -515,9 +559,17 @@ function crearTablaReservasCliente(reservas) {
 
                             <td>${reserva.servicio}</td>
 
+                            <td>${Number(reserva.duracion || 30)} minutos</td>
+
                             <td>${reserva.barbero}</td>
 
-                            <td>${reserva.fecha}</td>
+                            <td>
+                                ${reserva.fechaReserva
+            ? formatearFechaCliente(reserva.fechaReserva)
+            : "No registrada"}
+                            </td>
+
+                            <td>${formatearFechaCliente(reserva.fecha)}</td>
 
                             <td>${reserva.hora}</td>
 
@@ -914,6 +966,27 @@ function obtenerClaseEstadoCliente(estado) {
     }
 }
 
+// ==========================================
+// DETECTAR CRUCE ENTRE DOS RESERVAS
+// ==========================================
+
+function existeCruceHorario(horaInicio1, duracion1, horaInicio2, duracion2) {
+
+    // Convertir las horas HH:MM a minutos.
+    function convertirAMinutos(hora) {
+        const [horas, minutos] = hora.split(":").map(Number);
+        return horas * 60 + minutos;
+    }
+
+    const inicio1 = convertirAMinutos(horaInicio1);
+    const fin1 = inicio1 + duracion1;
+
+    const inicio2 = convertirAMinutos(horaInicio2);
+    const fin2 = inicio2 + duracion2;
+
+    // Comprobar si los horarios se superponen.
+    return inicio1 < fin2 && inicio2 < fin1;
+}
 
 // Obtener fecha local en formato YYYY-MM-DD.
 // Evita problemas con la conversión de zonas horarias.
@@ -929,4 +1002,12 @@ function obtenerFechaLocal() {
     const dia = String(fecha.getDate()).padStart(2, "0");
 
     return `${anio}-${mes}-${dia}`;
+}
+function formatearFechaCliente(fecha) {
+
+    if (!fecha) return "No disponible";
+
+    const [anio, mes, dia] = fecha.split("-");
+
+    return `${dia}/${mes}/${anio}`;
 }
