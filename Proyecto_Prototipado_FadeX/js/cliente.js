@@ -8,6 +8,7 @@
 // 1. OBTENER CLIENTE ACTUAL
 // ==========================================
 
+
 function obtenerClienteActual() {
 
     const usuarioGuardado = localStorage.getItem("fadexUsuario");
@@ -19,29 +20,16 @@ function obtenerClienteActual() {
     const clientes = obtenerDatos("fadexClientes");
 
     // Buscar al cliente por su correo.
-    let cliente = clientes.find(
-        item => item.correo.toLowerCase() ===
+    const cliente = clientes.find(
+        item =>
+            item.correo.toLowerCase() ===
             usuario.correo.toLowerCase()
     );
 
-    // Si no existe, registrarlo automáticamente
-    // para permitir probar el prototipo con cualquier correo.
-    if (!cliente) {
-
-        cliente = {
-            id: Date.now(),
-            nombre: usuario.nombre,
-            correo: usuario.correo,
-            telefono: "No registrado"
-        };
-
-        clientes.push(cliente);
-
-        guardarDatos("fadexClientes", clientes);
-    }
-
-    return cliente;
+    // Si no está registrado, no crearlo automáticamente.
+    return cliente || null;
 }
+
 
 
 // ==========================================

@@ -11,17 +11,31 @@
 const menusRoles = {
 
     admin: [
-        { nombre: "Resumen", icono: "▦", pagina: "resumen" },
-        { nombre: "Reservas", icono: "▣", pagina: "reservas" },
-        { nombre: "Ventas", icono: "▤", pagina: "ventas" },
-        { nombre: "Pagos", icono: "＄", pagina: "pagos" },
-        { nombre: "Clientes", icono: "♙", pagina: "clientes" },
-        { nombre: "Barberos", icono: "✂", pagina: "barberos" },
-        { nombre: "Usuarios", icono: "♟", pagina: "usuarios" },
-        { nombre: "Servicios y productos", icono: "▧", pagina: "catalogo" },
-        { nombre: "Fidelización", icono: "☆", pagina: "fidelizacion" },
-        { nombre: "Reportes", icono: "▥", pagina: "reportes" },
-        { nombre: "Configuración", icono: "⚙", pagina: "configuracion" }
+        { nombre: "Resumen", pagina: "resumen" },
+
+        { nombre: "Reservas", pagina: "reservas" },
+        { nombre: "Ventas", pagina: "ventas" },
+        { nombre: "Reclamos", pagina: "reclamos" },
+
+        { nombre: "Clientes", pagina: "clientes" },
+        { nombre: "Barberos", pagina: "barberos" },
+        { nombre: "Usuarios", pagina: "usuarios" },
+        { nombre: "Sueldos", pagina: "sueldos" },
+
+        { nombre: "Categorías", pagina: "categorias" },
+        { nombre: "Servicios", pagina: "catalogo" },
+        { nombre: "Productos", pagina: "catalogo" },
+
+        { nombre: "Seguimiento", pagina: "fidelizacion" },
+        { nombre: "Ruletas", pagina: "ruletas" },
+        { nombre: "Reglas", pagina: "reglas" },
+
+        { nombre: "Reportes", pagina: "reportes" },
+        { nombre: "Métricas", pagina: "metricas" },
+        { nombre: "Predicciones", pagina: "predicciones" },
+
+        { nombre: "Configuración", pagina: "configuracion" },
+        { nombre: "Perfil", pagina: "perfil" }
     ],
 
     barbero: [
@@ -43,7 +57,192 @@ const menusRoles = {
     ]
 
 };
+// =========================================
+// BARRA LATERAL DEL ADMINISTRADOR
+// =========================================
 
+function crearSidebarAdmin() {
+
+    const grupos = [
+
+        {
+            id: "operaciones",
+            nombre: "Operaciones",
+            icono: "fa-calendar-check",
+            opciones: [
+                { nombre: "Reservas", pagina: "reservas", icono: "fa-calendar-days" },
+                { nombre: "Ventas", pagina: "ventas", icono: "fa-cash-register" },
+                { nombre: "Reclamos", pagina: "reclamos", icono: "fa-comment-dots" }
+            ]
+        },
+
+        {
+            id: "gestion",
+            nombre: "Gestión",
+            icono: "fa-users",
+            opciones: [
+                { nombre: "Clientes", pagina: "clientes", icono: "fa-user" },
+                { nombre: "Barberos", pagina: "barberos", icono: "fa-scissors" },
+                { nombre: "Usuarios", pagina: "usuarios", icono: "fa-user-group" },
+                { nombre: "Sueldos", pagina: "sueldos", icono: "fa-wallet" }
+            ]
+        },
+
+        {
+            id: "catalogo",
+            nombre: "Catálogo",
+            icono: "fa-layer-group",
+            opciones: [
+                { nombre: "Categorías", pagina: "categorias", icono: "fa-list" },
+                { nombre: "Servicios", pagina: "catalogo", icono: "fa-scissors" },
+                { nombre: "Productos", pagina: "catalogo", icono: "fa-box" }
+            ]
+        },
+
+        {
+            id: "fidelizacion",
+            nombre: "Fidelización",
+            icono: "fa-star",
+            opciones: [
+                { nombre: "Seguimiento", pagina: "fidelizacion", icono: "fa-chart-line" },
+                { nombre: "Ruletas", pagina: "ruletas", icono: "fa-dharmachakra" },
+                { nombre: "Reglas", pagina: "reglas", icono: "fa-sliders" }
+            ]
+        },
+
+        {
+            id: "analisis",
+            nombre: "Análisis",
+            icono: "fa-chart-pie",
+            abierto: true,
+            opciones: [
+                { nombre: "Reportes", pagina: "reportes", icono: "fa-file-lines" },
+                { nombre: "Métricas", pagina: "metricas", icono: "fa-chart-column" },
+                { nombre: "Predicciones", pagina: "predicciones", icono: "fa-wand-magic-sparkles" }
+            ]
+        },
+
+        {
+            id: "sistema",
+            nombre: "Sistema",
+            icono: "fa-gear",
+            opciones: [
+                { nombre: "Configuración", pagina: "configuracion", icono: "fa-gear" },
+                { nombre: "Perfil", pagina: "perfil", icono: "fa-user-gear" }
+            ]
+        }
+
+    ];
+
+    return `
+        <div class="admin-sidebar-header">
+
+            <div class="admin-brand">
+                <i class="fa-solid fa-crown"></i>
+                <span>FadeX</span>
+            </div>
+
+            <p>SISTEMA DE GESTIÓN DE BARBERÍA</p>
+
+        </div>
+
+        <nav class="admin-sidebar-menu">
+
+            <button
+                class="admin-nav-link"
+                data-pagina="resumen"
+                onclick="navegarDashboard('resumen')">
+
+                <i class="fa-solid fa-house"></i>
+                <span>Resumen</span>
+
+            </button>
+
+            <div class="admin-menu-separator"></div>
+
+            ${grupos.map(grupo => `
+
+                <div class="admin-menu-group">
+
+                    <button
+                        class="admin-group-title ${grupo.abierto ? "expanded" : ""}"
+                        onclick="toggleAdminGroup('${grupo.id}')">
+
+                        <span>
+                            <i class="fa-solid ${grupo.icono}"></i>
+                            ${grupo.nombre}
+                        </span>
+
+                        <i class="fa-solid fa-chevron-down admin-group-arrow"></i>
+
+                    </button>
+
+                    <div
+                        class="admin-group-content ${grupo.abierto ? "open" : ""}"
+                        id="grupo-${grupo.id}">
+
+                        ${grupo.opciones.map(opcion => `
+
+                            <button
+                                class="admin-nav-link"
+                                data-pagina="${opcion.pagina}"
+                                onclick="navegarDashboard('${opcion.pagina}')">
+
+                                <i class="fa-solid ${opcion.icono}"></i>
+                                <span>${opcion.nombre}</span>
+
+                            </button>
+
+                        `).join("")}
+
+                    </div>
+
+                </div>
+
+            `).join("")}
+
+        </nav>
+
+        <div class="admin-sidebar-footer">
+
+            <button onclick="cerrarSesion()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+            </button>
+
+        </div>
+    `;
+}
+
+
+// =========================================
+// ABRIR Y CERRAR GRUPOS DEL MENÚ
+// =========================================
+
+function toggleAdminGroup(id) {
+
+    const contenido = document.getElementById(`grupo-${id}`);
+
+    if (!contenido) return;
+
+    const boton = contenido.previousElementSibling;
+
+    const estaAbierto = contenido.classList.contains("open");
+
+    if (estaAbierto) {
+
+        contenido.style.maxHeight = "0px";
+        contenido.classList.remove("open");
+
+    } else {
+
+        contenido.classList.add("open");
+        contenido.style.maxHeight = contenido.scrollHeight + "px";
+
+    }
+
+    boton.classList.toggle("expanded", !estaAbierto);
+}
 
 // =========================================
 // INFORMACION DE LOS ROLES
@@ -115,76 +314,55 @@ function mostrarDashboard(rol) {
                  BARRA LATERAL
             ================================== -->
 
-            <aside class="sidebar">
+            <aside class="${rol === "admin" ? "admin-sidebar" : "sidebar"}">
 
+                ${rol === "admin" ? crearSidebarAdmin() : `
 
-                <!-- LOGOTIPO -->
+                    <div class="sidebar-logo">
 
-                <div class="sidebar-logo">
+                        <img src="assets/Logo_FadeX.webp" alt="FadeX">
+                        <span>FadeX</span>
 
-                    <img
-                        src="assets/Logo_FadeX.webp"
-                        alt="FadeX">
+                    </div>
 
-                    <span>FadeX</span>
+                    <div class="sidebar-label">
+                        ${nombresRoles[rol]}
+                    </div>
 
-                </div>
+                    <nav class="sidebar-menu">
 
+                        ${menusRoles[rol].map(opcion => `
 
-                <!-- ROL -->
+                            <button
+                                class="sidebar-link"
+                                onclick="navegarDashboard('${opcion.pagina}')">
 
-                <div class="sidebar-label">
+                                <span class="sidebar-icon">
+                                    ${opcion.icono}
+                                </span>
 
-                    ${nombresRoles[rol]}
+                                <span>${opcion.nombre}</span>
 
-                </div>
+                            </button>
 
+                        `).join("")}
 
-                <!-- MENU -->
+                    </nav>
 
-                <nav class="sidebar-menu">
-
-                    ${menusRoles[rol].map(opcion => `
+                    <div class="sidebar-bottom">
 
                         <button
                             class="sidebar-link"
-                            onclick="navegarDashboard('${opcion.pagina}')">
+                            onclick="cerrarSesion()">
 
-                            <span class="sidebar-icon">
-
-                                ${opcion.icono}
-
-                            </span>
-
-                            <span>
-
-                                ${opcion.nombre}
-
-                            </span>
+                            <span class="sidebar-icon">↪</span>
+                            <span>Cerrar sesión</span>
 
                         </button>
 
-                    `).join("")}
+                    </div>
 
-                </nav>
-
-
-                <!-- CERRAR SESION -->
-
-                <div class="sidebar-bottom">
-
-                    <button
-                        class="sidebar-link"
-                        onclick="cerrarSesion()">
-
-                        <span class="sidebar-icon">↪</span>
-
-                        <span>Cerrar sesión</span>
-
-                    </button>
-
-                </div>
-
+                `}
 
             </aside>
 
@@ -289,14 +467,17 @@ function navegarDashboard(pagina) {
     }
 
 
-    // ACTUALIZAR MENU ACTIVO
+    // =========================================
+    // ACTUALIZAR OPCIÓN ACTIVA
+    // =========================================
 
-    document.querySelectorAll(".sidebar-link").forEach(boton => {
+    document.querySelectorAll(
+        ".sidebar-link, .admin-nav-link"
+    ).forEach(boton => {
 
         boton.classList.remove("active");
 
-        if (boton.getAttribute("onclick") ===
-            `navegarDashboard('${pagina}')`) {
+        if (boton.dataset.pagina === pagina) {
 
             boton.classList.add("active");
 

@@ -45,6 +45,29 @@ function obtenerContenidoAdmin(pagina) {
         case "configuracion":
             return mostrarConfiguracionAdmin();
 
+        case "reclamos":
+            return mostrarModuloAdminEnDesarrollo("Reclamos");
+
+        case "sueldos":
+            return mostrarModuloAdminEnDesarrollo("Sueldos");
+
+        case "categorias":
+            return mostrarModuloAdminEnDesarrollo("Categorías");
+
+        case "ruletas":
+            return mostrarModuloAdminEnDesarrollo("Ruletas");
+
+        case "reglas":
+            return mostrarModuloAdminEnDesarrollo("Reglas");
+
+        case "metricas":
+            return mostrarModuloAdminEnDesarrollo("Métricas");
+
+        case "predicciones":
+            return mostrarModuloAdminEnDesarrollo("Predicciones");
+
+        case "perfil":
+            return mostrarModuloAdminEnDesarrollo("Perfil");
         default:
             return `
                 <div class="dashboard-panel">
@@ -154,8 +177,8 @@ function crearTablaReservasAdmin(reservas) {
                             <td>${reserva.servicio}</td>
                         <td>
                             ${reserva.fechaReserva
-                                ? formatearFechaCliente(reserva.fechaReserva)
-                                : "No registrada"}
+            ? formatearFechaCliente(reserva.fechaReserva)
+            : "No registrada"}
                         </td>
 
                         <td>${formatearFechaCliente(reserva.fecha)}</td>
@@ -586,13 +609,15 @@ function mostrarBarberosAdmin() {
 }
 
 
+
 function agregarBarberoDemo() {
 
-    const nombre = prompt("Nombre del barbero:");
+    // Solicitar los datos del nuevo barbero.
+    const nombre = prompt("Nombre completo del barbero:");
 
     if (!nombre || !nombre.trim()) return;
 
-    const correo = prompt("Correo del barbero:");
+    const correo = prompt("Correo electrónico del barbero:");
 
     if (!correo || !correo.trim()) return;
 
@@ -604,23 +629,60 @@ function agregarBarberoDemo() {
 
     if (!telefono || !telefono.trim()) return;
 
+    const contrasena = prompt("Contraseña inicial del barbero:");
+
+    if (!contrasena || contrasena.length < 6) {
+        alert("La contraseña debe tener al menos 6 caracteres.");
+        return;
+    }
+
+    // Normalizar el correo.
+    const correoNormalizado = correo.trim().toLowerCase();
+
+    // Obtener los usuarios existentes.
     const barberos = obtenerDatos("fadexBarberos");
+    const clientes = obtenerDatos("fadexClientes");
 
-    barberos.push({
+    // Evitar correos duplicados.
+    const correoExiste = [...barberos, ...clientes].some(
+        usuario =>
+            usuario.correo &&
+            usuario.correo.toLowerCase() === correoNormalizado
+    );
+
+    if (correoExiste) {
+        alert("Ya existe un usuario registrado con ese correo.");
+        return;
+    }
+
+    // Crear únicamente un barbero.
+    const nuevoBarbero = {
+
         id: Date.now(),
-        nombre: nombre.trim(),
-        correo: correo.trim(),
-        especialidad: especialidad.trim(),
-        telefono: telefono.trim(),
-        estado: "Activo"
-    });
 
+        nombre: nombre.trim(),
+
+        correo: correoNormalizado,
+
+        especialidad: especialidad.trim(),
+
+        telefono: telefono.trim(),
+
+        contrasena: contrasena,
+
+        estado: "Activo"
+    };
+
+    barberos.push(nuevoBarbero);
+
+    // Guardar únicamente en la lista de barberos.
     guardarDatos("fadexBarberos", barberos);
 
-    alert("Barbero registrado correctamente.");
+    alert("¡Barbero registrado correctamente!");
 
     navegarDashboard("barberos");
 }
+
 
 
 // ==========================================
@@ -1223,4 +1285,35 @@ function eliminarProductoAdmin(id) {
     alert("Producto eliminado.");
 
     navegarDashboard("catalogo");
+}
+// ==========================================
+// MÓDULOS PENDIENTES DE DESARROLLO
+// ==========================================
+
+function mostrarModuloAdminEnDesarrollo(nombre) {
+
+    return `
+        <h2 class="dashboard-title">${nombre}</h2>
+
+        <p class="dashboard-subtitle">
+            Panel de administración de FadeX.
+        </p>
+
+        <div class="dashboard-panel">
+
+            <i class="fa-solid fa-person-digging"
+                style="font-size: 30px; color: var(--color-dorado);">
+            </i>
+
+            <h3 class="panel-title" style="margin-top: 18px;">
+                Módulo en desarrollo
+            </h3>
+
+            <p class="texto-gris">
+                Estamos preparando esta sección para
+                incorporarla a las próximas versiones de FadeX.
+            </p>
+
+        </div>
+    `;
 }
